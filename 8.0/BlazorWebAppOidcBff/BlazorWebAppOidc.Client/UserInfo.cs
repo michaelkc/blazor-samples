@@ -16,7 +16,8 @@ public sealed class UserInfo
         new()
         {
             UserId = GetRequiredClaim(principal, UserIdClaimType),
-            Name = GetRequiredClaim(principal, NameClaimType),
+            //Name = GetRequiredClaim(principal, NameClaimType),
+            Name = GetRequiredClaim(principal, UserIdClaimType),
         };
 
     public ClaimsPrincipal ToClaimsPrincipal() =>

@@ -34,7 +34,7 @@ builder.Services.AddAuthentication("MicrosoftOidc")
         // are provided by "Authentication:Schemes:MicrosoftOidc:Scope" 
         // configuration because configuration may overwrite the scopes collection.
 
-        //oidcOptions.Scope.Add(OpenIdConnectScope.OpenIdProfile);
+        oidcOptions.Scope.Add(OpenIdConnectScope.OpenIdProfile + " api");
         // ........................................................................
 
         // ........................................................................
@@ -67,7 +67,7 @@ builder.Services.AddAuthentication("MicrosoftOidc")
         // "Expose an API". This is necessary for backend web API (MinimalApiJwt)
         // to validate the access token with AddBearerJwt.
 
-        oidcOptions.Scope.Add("https://{DIRECTORY NAME}.onmicrosoft.com/{CLIENT ID}/Weather.Get");
+        oidcOptions.Scope.Add("api");
         // ........................................................................
 
         // ........................................................................
@@ -79,14 +79,14 @@ builder.Services.AddAuthentication("MicrosoftOidc")
         // single-tenant apps, but it requires a custom IssuerValidator as shown 
         // in the comments below. 
 
-        oidcOptions.Authority = "https://login.microsoftonline.com/{TENANT ID}/v2.0/";
+        oidcOptions.Authority = "https://demo.duendesoftware.com/";
         // ........................................................................
 
         // ........................................................................
         // Set the Client ID for the app. Set the {CLIENT ID} placeholder to
         // the Client ID.
 
-        oidcOptions.ClientId = "{CLIENT ID}";
+        oidcOptions.ClientId = "interactive.confidential";
         // ........................................................................
         
         // ........................................................................
@@ -98,7 +98,7 @@ builder.Services.AddAuthentication("MicrosoftOidc")
         // for OIDC configuration is automatically read from 
         // "Authentication:Schemes:MicrosoftOidc:ClientSecret" configuration.
 
-        //oidcOptions.ClientSecret = "{PREFER NOT SETTING THIS HERE}";
+        oidcOptions.ClientSecret = "secret";
         // ........................................................................
 
         // ........................................................................
@@ -144,6 +144,11 @@ builder.Services.AddAuthentication("MicrosoftOidc")
         // use the refresh token to obtain a new access token on access token
         // expiration.
         // ........................................................................
+
+        oidcOptions.Events.OnTokenValidated = context =>
+        {
+            return Task.CompletedTask;
+        };
     })
     .AddCookie("Cookies");
 

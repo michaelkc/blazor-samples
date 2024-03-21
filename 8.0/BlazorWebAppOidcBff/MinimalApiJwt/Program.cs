@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add service defaults & Aspire components.
@@ -7,10 +9,16 @@ builder.Services.AddAuthentication()
     .AddJwtBearer("Bearer", jwtOptions =>
     {
         // This should match the authority configured for the OIDC handler in BlazorWebAppOidc/Program.cs.
-        jwtOptions.Authority = "https://login.microsoftonline.com/{tenant-id}/v2.0/";
+        jwtOptions.Authority = "https://demo.duendesoftware.com/";
         // This should match just the path of the Application ID URI configured when adding the "Weather.Get" scope
         // under "Expose an API" in the Azure or Entra portal.
-        jwtOptions.Audience = "{client-id}";
+        jwtOptions.Audience = "api";
+        jwtOptions.Events = new JwtBearerEvents();
+        jwtOptions.Events.OnAuthenticationFailed = context =>
+        {
+          
+            return Task.CompletedTask;
+        };
     });
 builder.Services.AddAuthorization();
 
